@@ -1,0 +1,7 @@
+[target.aarch64-apple-ios]
+linker = "xcrun --sdk iphoneos clang"
+ar = "xcrun --sdk iphoneos ar"
+
+[target.aarch64-apple-ios-sim]
+linker = "xcrun --sdk iphonesimulator clang"
+ar = "xcrun --sdk iphonesimulator ar"
