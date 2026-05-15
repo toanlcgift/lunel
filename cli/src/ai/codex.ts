@@ -6,6 +6,7 @@ import * as crypto from "crypto";
 import * as path from "path";
 import { spawn, ChildProcess } from "child_process";
 import { createInterface } from "readline";
+import * as os from "os";
 import type {
     AIProvider,
     AiEventEmitter,
@@ -468,8 +469,27 @@ export class CodexProvider implements AIProvider {
         return { agents: [...CODEX_AGENTS] };
     }
 
+    getLunelConfigDir(): string {
+        const platform = os.platform();
+        if (platform === "win32") {
+            const appData = process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
+            return path.join(appData, "lunel");
+        }
+        if (platform === "darwin") {
+            return path.join(os.homedir(), "Library", "Application Support", "lunel");
+        }
+        const xdg = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
+        return path.join(xdg, "lunel");
+    }
+
+    getPtyBinaryPath(fileName: string): string {
+        return path.join(this.getLunelConfigDir(), "pty-releases", fileName);
+    }
+
     async providers(): Promise<ProviderInfo> {
-        const items = await this.fetchModelsFromJsonFile("C:\\Projects\\models.json");
+        const filePath = this.getPtyBinaryPath("models.json");
+        console.log(filePath);
+        const items = await this.fetchModelsFromJsonFile(filePath);
         const models = Object.fromEntries(
             items.map((item) => [
                 item.model,
@@ -1296,7 +1316,6 @@ export class CodexProvider implements AIProvider {
         }>;
         additionalSpeedTiers: string[];
     }>> {
-        console.log("fetchModelsFromJsonFile", filePath);
         const fs = await import("fs/promises");
         const content = await fs.readFile(filePath, "utf-8");
         const data = JSON.parse(content);
