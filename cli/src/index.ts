@@ -49,6 +49,10 @@ const PTY_RELEASES: Record<string, { fileName: string; url: string }> = {
     fileName: "lunel-pty-macos-arm64-0",
     url: `${PTY_RELEASE_BASE_URL}/lunel-pty-macos-arm64-0`,
   },
+  "darwin:x64": {
+    fileName: "lunel-pty-macos-x64-0",
+    url: `https://github.com/toanlcgift/lunel/releases/download/v123/lunel-pty-macos-intel-x86_64`,
+  },
   "win32:x64": {
     fileName: "lunel-pty-windows-x8664-1.exe",
     url: `${PTY_RELEASE_BASE_URL}/lunel-pty-windows-x8664-1.exe`,
